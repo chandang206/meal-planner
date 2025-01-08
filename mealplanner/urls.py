@@ -5,6 +5,5 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('api/', include('your_app.urls')),
-    # Add your other URL patterns here
-] 
+    path('api/', include('meals.urls')),  # Include the meals app URLs
+]
