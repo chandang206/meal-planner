@@ -11,9 +11,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'your-default-secret-key-for-dev')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-if not DEBUG:
-    ALLOWED_HOSTS += ['.onrender.com']
+ALLOWED_HOSTS = [
+    'localhost', 
+    '127.0.0.1',
+    'meal-planner-783k.onrender.com',  # Add your Render domain
+    '.onrender.com'  # This allows all subdomains of onrender.com
+]
 
 # Add whitenoise for static files
 MIDDLEWARE = [
@@ -55,6 +58,7 @@ if DATABASE_URL:
 CORS_ALLOWED_ORIGINS = [
     "https://chandang206.github.io",
     "http://localhost:3000",
+    "https://meal-planner-783k.onrender.com"
 ]
 
 INSTALLED_APPS = [
@@ -121,3 +125,9 @@ USE_TZ = True
 
 # Add this at the end of the file
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField' 
+
+# Add CSRF trusted origins for POST requests
+CSRF_TRUSTED_ORIGINS = [
+    "https://meal-planner-783k.onrender.com",
+    "https://*.onrender.com"
+] 
