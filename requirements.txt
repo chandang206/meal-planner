@@ -41,3 +41,4 @@ Werkzeug==3.0.1
 wheel==0.42.0
 whitenoise==6.8.2
 wsproto==1.2.0
+djangorestframework==3.14.0

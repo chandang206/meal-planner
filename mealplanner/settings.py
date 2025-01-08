@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'meals',
+    'rest_framework',
     # your other apps...
 ]
 
@@ -132,3 +133,12 @@ CSRF_TRUSTED_ORIGINS = [
     "https://meal-planner-783k.onrender.com",
     "https://*.onrender.com"
 ] 
+
+# Django REST Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+} 
