@@ -92,3 +92,32 @@ LOGGING = {
 
 # Make sure dj_database_url is imported
 import dj_database_url 
+
+# Add these settings after BASE_DIR definition
+ROOT_URLCONF = 'mealplanner.urls'
+
+WSGI_APPLICATION = 'mealplanner.wsgi.application'
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+# Add these settings before DATABASES configuration
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_TZ = True
+
+# Add this at the end of the file
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField' 
