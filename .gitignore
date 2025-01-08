@@ -1,4 +1,6 @@
 # Python
+# Local development uses Python 3.12.1
+# Production (Render.com) uses Python 3.12.1
 __pycache__/
 *.py[cod]
 *$py.class
@@ -40,3 +42,6 @@ ENV/
 # OS
 .DS_Store
 Thumbs.db 
+
+# Render
+.render-buildlogs/ 
