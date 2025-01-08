@@ -1,7 +1,10 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from . import views
 
+router = DefaultRouter()
+router.register(r'meals', views.MealViewSet)
+
 urlpatterns = [
-    path('meals/', views.meal_list, name='meal-list'),
-    # Add other meal-related endpoints here
+    path('', include(router.urls)),
 ] 
