@@ -1,0 +1,207 @@
+{% extends "recipes/layout.html" %}
+{% load static %}
+{% load recipe_extras %}
+
+{% block body %}
+<div class="container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if 'persistent' in message.tags %}success{% elif 'error' in message.tags %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="calendar-section mb-5">
+        <div class="calendar-header">
+            <h2>Meal Calendar</h2>
+            <div class="calendar-actions">
+                <span class="current-week">{{ month }} {{ year }}</span>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMealModal">
+                    <i class="fas fa-plus"></i> Add Meal
+                </button>
+            </div>
+        </div>
+
+        <div class="weekly-calendar">
+            {% for day in calendar_week %}
+            <div class="day-column {% if day.date == today %}today{% endif %}">
+                <div class="day-header">
+                    <span class="weekday">{{ day.weekday }}</span>
+                    <span class="date">{{ day.date|date:"M d" }}</span>
+                </div>
+                <div class="day-meals">
+                    {% if day.day in meal_dict %}
+                        {% for meal in meal_dict|get_item:day.day %}
+                        <div class="meal-card {{ meal.meal_type }}" 
+                             data-meal-title="{{ meal.recipe.title|escapejs }}"
+                             data-meal-type="{{ meal.get_meal_type_display|escapejs }}"
+                             data-meal-servings="{{ meal.servings }}"
+                             data-meal-notes="{{ meal.notes|default:''|escapejs }}"
+                             data-recipe-id="{{ meal.recipe.id }}"
+                             data-meal-id="{{ meal.id }}"
+                             data-bs-toggle="tooltip" 
+                             title="Click for details">
+                            <div class="meal-time">{{ meal.get_meal_type_display }}</div>
+                            <div class="meal-title">{{ meal.recipe.title }}</div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <button class="btn btn-light add-meal-btn" 
+                        data-date="{{ day.date|date:'Y-m-d' }}"
+                        data-bs-toggle="modal" 
+                        data-bs-target="#addMealModal">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="recipes-section">
+        <h2>
+            Saved Recipes
+            <a href="{% url 'add_recipe' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add New Recipe
+            </a>
+        </h2>
+        <div class="recipe-list">
+            {% if recipes %}
+                {% for recipe in recipes %}
+                <a href="{% url 'recipe_detail' recipe.id %}" class="recipe-card">
+                    <img src="{% if recipe.image_url %}{{ recipe.image_url }}{% else %}https://via.placeholder.com/60{% endif %}" 
+                         alt="{{ recipe.title }}" 
+                         class="recipe-img">
+                    <div class="recipe-info">
+                        <h3>{{ recipe.title }}</h3>
+                        <p>Prep: {{ recipe.prep_time }} mins | Cook: {{ recipe.cook_time }} mins</p>
+                    </div>
+                </a>
+                {% endfor %}
+            {% else %}
+                <p>No recipes added yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Add Meal Modal -->
+<div class="modal fade" id="addMealModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Plan a Meal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="mealPlanForm" method="POST" action="{% url 'plan_meal' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label>Date</label>
+                        <input type="date" name="date" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Recipe</label>
+                        <select name="recipe" class="form-control" required>
+                            {% for recipe in recipes %}
+                            <option value="{{ recipe.id }}">{{ recipe.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label>Meal Type</label>
+                        <select name="meal_type" class="form-control" required>
+                            <option value="breakfast">Breakfast</option>
+                            <option value="lunch">Lunch</option>
+                            <option value="dinner">Dinner</option>
+                            <option value="snack">Snack</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label>Servings</label>
+                        <input type="number" name="servings" class="form-control" min="1" value="1">
+                    </div>
+                    <div class="mb-3">
+                        <label>Notes</label>
+                        <textarea name="notes" class="form-control"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="mealPlanForm" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Meal Details Popup -->
+<div class="modal fade meal-popup" id="mealDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="meal-info">
+                    <p><span class="label">Meal Type:</span> <span id="mealType"></span></p>
+                    <p><span class="label">Servings:</span> <span id="servings"></span></p>
+                    <p id="notesSection" style="display: none">
+                        <span class="label">Notes:</span> <span id="notes"></span>
+                    </p>
+                </div>
+                <a href="#" id="viewRecipeBtn" class="btn btn-view-recipe">View Recipe Details</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+{{ block.super }}
+<script src="{% static 'recipes/js/meal_planner.js' %}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click handlers to meal cards
+    document.querySelectorAll('.meal-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const data = this.dataset;
+            showMealPopup(
+                data.mealTitle,
+                data.mealType,
+                data.mealServings,
+                data.mealNotes,
+                data.recipeId
+            );
+        });
+    });
+});
+
+function showMealPopup(title, mealType, servings, notes, recipeId) {
+    const modal = new bootstrap.Modal(document.getElementById('mealDetailsModal'));
+    
+    // Set content
+    document.querySelector('#mealDetailsModal .modal-title').textContent = title;
+    document.getElementById('mealType').textContent = mealType;
+    document.getElementById('servings').textContent = servings;
+    
+    // Handle notes
+    const notesSection = document.getElementById('notesSection');
+    if (notes && notes.trim() !== '') {
+        document.getElementById('notes').textContent = notes;
+        notesSection.style.display = 'block';
+    } else {
+        notesSection.style.display = 'none';
+    }
+    
+    // Set recipe link with correct URL pattern
+    document.getElementById('viewRecipeBtn').href = `/recipe/${recipeId}`;
+    
+    modal.show();
+}
+</script>
+{% endblock %}

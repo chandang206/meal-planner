@@ -1,0 +1,54 @@
+{% extends "recipes/layout.html" %}
+{% load static %}
+ 
+
+{% block body %}
+    <div class="container fom-container mt-4">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if 'persistent' in message.tags %}success{% elif 'error' in message.tags %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="recipe-title">{{ recipe.title }}</h2>
+                <div class="recipe-actions text-end mb-3">
+                    <a href="{% url 'edit_recipe' recipe.id %}" class="btn btn-primary">Edit Recipe</a>
+                    <a href="{% url 'delete_recipe' recipe.id %}" class="btn btn-danger">Delete Recipe</a>
+                </div>
+                {% if recipe.image_url %}
+                <div class="recipe-image mb-4">
+                    <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}" class="img-fluid rounded">
+                </div>
+                {% endif %}
+                <div class="recipe-meta">
+                    <span>Prep Time: {{ recipe.prep_time }} mins</span>
+                    <span>Cook Time: {{ recipe.cook_time }} mins</span>
+                    <span>Added: {{ recipe.date|date:"F j, Y" }}</span>
+                </div>
+                
+                <div class="recipe-description mt-4">
+                    <h4>Description</h4>
+                    <p>{{ recipe.description }}</p>
+                </div>
+    
+                <div class="recipe-ingredients mt-4">
+                    <h4>Ingredients</h4>
+                    <ul class="ingredients-list">
+                        {% for ingredient in ingredients %}
+                        <li>{{ ingredient.quantity }} {{ ingredient.get_unit_display }} {{ ingredient.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    
+        <div class="text-center mb-4">
+            <a href="{% url 'index' %}" class="btn btn-secondary">Back to Recipes</a>
+        </div>
+    </div>
+{% endblock %}

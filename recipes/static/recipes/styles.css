@@ -1,0 +1,583 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    background: #f8fafc;
+    min-height: 100%;
+    position: relative;
+    margin-top: 60px;
+}
+
+.navbar {
+    background: #1d4ed8;
+    padding: 0.8rem 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar h1 {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.navbar h1 a {
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.navbar h1 a:hover {
+    opacity: 0.9;
+    color: white;
+}
+
+.nav-items {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-items h6 {
+    color: #e5e7eb;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.login-btn {
+    background: white;
+    color: #1d4ed8;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.login-btn:hover {
+    background: #f8fafc;
+    transform: translateY(-1px);
+}
+
+.container {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    position: relative;
+}
+
+.recipe-actions {
+    margin-top: -1rem;
+    margin-bottom: 1rem;
+}
+
+.recipe-actions .btn {
+    margin-left: 0.5rem;
+}
+
+/* Alert styles */
+.alert {
+    margin: 1rem 0;
+    padding: 1rem;
+    border-radius: 8px;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    position: relative;
+    z-index: 1000;
+}
+
+.alert.fade {
+    opacity: 0;
+}
+
+.alert.show {
+    opacity: 1;
+}
+
+.alert-success {
+    background-color: #d1fae5;
+    border-color: #34d399;
+    color: #065f46;
+}
+
+.alert-danger {
+    background-color: #fee2e2;
+    border-color: #f87171;
+    color: #991b1b;
+}
+
+.alert-dismissible .btn-close {
+    padding: 1.25rem;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+/* Calendar styles */
+.calendar-section {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.calendar-header h2 {
+    font-size: 1.5rem;
+    color: #1f2937;
+    margin: 0;
+}
+
+.calendar-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.current-week {
+    font-size: 1.1rem;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.weekly-calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 15px;
+}
+
+.day-column {
+    background: #f9fafb;
+    border-radius: 10px;
+    padding: 12px;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+}
+
+.day-column.today {
+    background: #f0f9ff;
+    border: 2px solid #3b82f6;
+}
+
+.day-header {
+    text-align: left;
+    margin-bottom: 12px;
+}
+
+.day-header .weekday {
+    display: block;
+    font-weight: 600;
+    color: #4b5563;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.day-header .date {
+    display: block;
+    font-size: 1.1rem;
+    color: #1f2937;
+    margin-top: 2px;
+}
+
+.day-meals {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.meal-card {
+    background: white;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.meal-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.meal-time {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.meal-title {
+    font-size: 0.9rem;
+    color: #1f2937;
+}
+
+/* Meal type styles */
+.meal-card.breakfast {
+    border-left: 3px solid #3b82f6;
+}
+
+.meal-card.lunch {
+    border-left: 3px solid #10b981;
+}
+
+.meal-card.dinner {
+    border-left: 3px solid #f59e0b;
+}
+
+.meal-card.snack {
+    border-left: 3px solid #ec4899;
+}
+
+.meal-card.breakfast .meal-time { color: #3b82f6; }
+.meal-card.lunch .meal-time { color: #10b981; }
+.meal-card.dinner .meal-time { color: #f59e0b; }
+.meal-card.snack .meal-time { color: #ec4899; }
+
+.add-meal-btn {
+    align-self: flex-end;
+    margin-top: auto;
+    width: 100%;
+    border: 1px dashed #d1d5db;
+    color: #6b7280;
+    padding: 6px;
+    transition: all 0.2s;
+}
+
+.add-meal-btn:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+    color: #4b5563;
+}
+
+.recipes-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+    border-top: 4px solid #1d4ed8;
+}
+
+.recipes-section h2 {
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.recipes-section h2 .btn-primary {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #1d4ed8;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.recipes-section h2 .btn-primary:hover {
+    background-color: #1e40af;
+    transform: translateY(-2px);
+}
+
+.recipe-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.recipe-card {
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+}
+
+.recipe-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #1d4ed8, #3b82f6);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.recipe-card:hover::before {
+    opacity: 1;
+}
+
+.recipe-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+}
+
+.recipe-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.recipe-info {
+    padding: 1.25rem;
+    flex: 1;
+}
+
+.recipe-info h3 {
+    color: #1f2937;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+}
+
+.recipe-info p {
+    color: #6b7280;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.recipe-list .btn-primary {
+    margin-top: 1rem;
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    background-color: #1d4ed8;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.recipe-list .btn-primary:hover {
+    background-color: #1e40af;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .recipes-section {
+        padding: 1.5rem;
+    }
+
+    .recipes-section h2 {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .recipes-section h2 .btn-primary {
+        width: auto;
+    }
+
+    .recipe-list {
+        grid-template-columns: 1fr;
+    }
+
+    .recipe-img {
+        height: 160px;
+    }
+}
+
+/* Meal popup styles */
+.meal-card {
+    background: white;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.meal-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.meal-popup {
+    max-width: 300px;
+    padding: 0;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.meal-popup .modal-header {
+    background: #f8fafc;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1rem;
+}
+
+.meal-popup .modal-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+}
+
+.meal-popup .modal-body {
+    padding: 1rem;
+}
+
+.meal-popup .meal-info {
+    margin-bottom: 1rem;
+}
+
+.meal-popup .meal-info p {
+    margin: 0.5rem 0;
+    color: #4b5563;
+    font-size: 0.9rem;
+}
+
+.meal-popup .meal-info .label {
+    font-weight: 500;
+    color: #1f2937;
+    margin-right: 0.5rem;
+}
+
+.meal-popup .btn-view-recipe {
+    width: 100%;
+    background: #1d4ed8;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.meal-popup .btn-view-recipe:hover {
+    background: #1e40af;
+    transform: translateY(-1px);
+    color: white;
+}
+
+/* Auth Forms Styling */
+.auth-container {
+    max-width: 400px;
+    margin: 4rem auto;
+    padding: 0 1rem;
+}
+
+.auth-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    border-top: 4px solid #1d4ed8;
+}
+
+.auth-card h2 {
+    color: #1f2937;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.auth-form .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.auth-form label {
+    display: block;
+    color: #4b5563;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: #1d4ed8;
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
+}
+
+.auth-form button {
+    width: 100%;
+    padding: 0.75rem;
+    background: #1d4ed8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.auth-form button:hover {
+    background: #1e40af;
+    transform: translateY(-1px);
+}
+
+.auth-links {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.auth-links a {
+    color: #1d4ed8;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.auth-links a:hover {
+    color: #1e40af;
+    text-decoration: underline;
+}
+
+.auth-form .error-message {
+    color: #dc2626;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
