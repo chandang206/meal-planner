@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'meals',
     'rest_framework',
+    'drf_yasg',
     # your other apps...
 ]
 
